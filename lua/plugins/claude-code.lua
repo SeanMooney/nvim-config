@@ -9,18 +9,20 @@ return {
       -- Use snacks.nvim for terminal integration
       terminal = {
         provider = "snacks",
-        auto_close = false, -- Keep terminal open after Claude exits
+        auto_close = true, -- Close terminal when Claude exits
         split_side = "right", -- Terminal on right side
-        split_width_percentage = 40, -- 40% width split for better readability
+        split_width_percentage = 0.40, -- 40% width split for better readability
       },
       -- Use git project root as working directory
       git_repo_cwd = true,
       auto_start = true, -- Automatically start Claude server when needed
       -- Diff view customizations
-      diff = {
+      diff_opts = {
         auto_close_on_accept = true, -- Close diff view after accepting
+        auto_close_on_deny = true, -- Close diff view after rejecting
         vertical_split = true, -- Use vertical split for diffs
-        resize_on_diff = false, -- Don't resize terminal when opening diffs
+        open_in_current_tab = true, -- Open diffs in current tab
+        keep_terminal_focus = false, -- Focus diff view when opened
       },
     },
     keys = {

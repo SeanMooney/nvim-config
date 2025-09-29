@@ -77,3 +77,35 @@ LSP servers and tools are managed via Mason. The configuration uses:
 - **nvim-lspconfig**: LSP configuration
 
 To add new LSP servers, add them to the `ensure_installed` table in a Mason plugin spec, or configure them in `nvim-lspconfig` opts under `servers`.
+
+## Documentation Guidelines
+
+When adding, modifying, or configuring plugins:
+
+1. **Update README.md** to reflect new functionality:
+   - Add new keybindings to the "Essential Keymaps" section
+   - Document new features in the "Features" section with clear descriptions
+   - Update the plugin table (see below) with any new plugins
+   - Add relevant tips to "Tips & Troubleshooting" if the feature has common gotchas
+
+2. **Plugin Table Format** (in README.md):
+   - Each plugin should be listed with: Name, Purpose, and When to Use It
+   - Focus on user-facing functionality, not implementation details
+   - Explain the value proposition clearly for new users
+
+3. **Documentation Standards**:
+   - Use `<Space>` notation for leader key, not `<leader>`
+   - Include both the keymap and a description of what it does
+   - Group related keymaps together (e.g., all git commands under "Git")
+   - Provide context for why a feature is useful, not just what it does
+
+4. **When to Update Documentation**:
+   - Adding a new plugin to `lua/plugins/`
+   - Modifying significant plugin configuration (especially keymaps)
+   - Changing options in `lua/config/options.lua` that affect user experience
+   - Adding custom keymaps in `lua/config/keymaps.lua`
+
+5. **Keep User-Focused**:
+   - Write for experienced Vim users who are new to Neovim/LazyVim
+   - Explain concepts that differ from vanilla Vim
+   - Provide practical examples and workflows
