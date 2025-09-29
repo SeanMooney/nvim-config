@@ -31,9 +31,6 @@ return {
       on_open = function()
         vim.opt.spell = true -- Enable spell checking in zen mode
       end,
-      on_close = function()
-        -- Restore spell checking to default (controlled by options.lua)
-      end,
     },
     keys = {
       { "<leader>z", "<cmd>ZenMode<cr>", desc = "Zen Mode" },

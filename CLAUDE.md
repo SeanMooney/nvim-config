@@ -31,6 +31,137 @@ This is a Neovim configuration based on [LazyVim](https://github.com/LazyVim/Laz
 5. **Extending lists**: Use `vim.list_extend()` to append to default lists (e.g., treesitter parsers)
 6. **Overriding defaults**: Use `opts` function that returns new table to completely replace defaults
 
+## Best Practices
+
+### File Organization
+- **options.lua**: ONLY Neovim settings (`vim.opt.*`, `vim.g.*`). NO autocmds, NO function calls that set up behavior.
+- **autocmds.lua**: ALL autocommands (`vim.api.nvim_create_autocmd`). Move autocmds out of options.lua.
+- **keymaps.lua**: Custom keymaps that aren't plugin-specific. Plugin-specific keymaps should use the `keys` property in plugin specs.
+
+### Mason Package Management
+- **Centralize all tool installations** in `lua/plugins/mason.lua` with a single `ensure_installed` list
+- **DO NOT** scatter `ensure_installed` across multiple plugin files (ansible.lua, bash.lua, etc.)
+- Group packages by type (LSP servers, linters, formatters) with comments
+- This makes it easy to audit what tools are installed and avoid duplicates
+
+Example:
+```lua
+return {
+  {
+    "mason-org/mason.nvim",
+    opts = {
+      ensure_installed = {
+        -- Language servers
+        "ansible-language-server",
+        "bash-language-server",
+        -- Linters
+        "shellcheck",
+        "ansible-lint",
+        -- Formatters
+        "shfmt",
+      },
+    },
+  },
+}
+```
+
+### Opts Merging Pattern
+When extending lists in `opts` functions, ALWAYS:
+1. Initialize the list if it doesn't exist
+2. Extend the list
+3. Return the opts table
+
+**Correct pattern:**
+```lua
+opts = function(_, opts)
+  opts.ensure_installed = opts.ensure_installed or {}
+  vim.list_extend(opts.ensure_installed, { "bash", "python" })
+  return opts
+end,
+```
+
+**Incorrect patterns:**
+```lua
+-- Missing return statement
+opts = function(_, opts)
+  vim.list_extend(opts.ensure_installed or {}, { "bash" })
+end,
+
+-- Inline initialization (harder to read and error-prone)
+opts = function(_, opts)
+  vim.list_extend(opts.ensure_installed or {}, { "bash" })
+end,
+```
+
+### Avoid Duplicate Plugin Specs
+- **One plugin = one spec** in each file
+- If you need both `opts` and `init` for the same plugin, combine them in a single spec
+- Multiple specs for the same plugin in one file will cause confusion and potential merge issues
+
+**Correct:**
+```lua
+{
+  "neovim/nvim-lspconfig",
+  opts = { servers = { bashls = {} } },
+  init = function()
+    vim.api.nvim_create_autocmd(...)
+  end,
+}
+```
+
+**Incorrect:**
+```lua
+-- Two separate specs for the same plugin
+{ "neovim/nvim-lspconfig", opts = { servers = { bashls = {} } } },
+{ "neovim/nvim-lspconfig", init = function() ... end },
+```
+
+### Global vs Filetype-Specific Settings
+- **Avoid global settings** that should only apply to specific filetypes
+- Use autocmds with FileType events for filetype-specific behavior
+
+**Example - Spell checking:**
+```lua
+-- options.lua - Configure spell checking but don't enable globally
+vim.opt.spelllang = { "en_us" }
+vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
+
+-- autocmds.lua - Enable only for specific filetypes
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "gitcommit", "markdown", "text" },
+  callback = function()
+    vim.opt_local.spell = true
+  end,
+})
+```
+
+### Treesitter Parser Management
+- Avoid duplicating parser names across multiple files
+- If a language-specific file (e.g., `bash.lua`) adds a parser, don't add it again in `treesitter.lua`
+- Keep the main `treesitter.lua` for parsers that don't have dedicated language files
+
+### LSP Server Configuration
+- Configure LSP servers in language-specific plugin files (e.g., `ansible.lua`, `bash.lua`)
+- Use the `servers` table in `nvim-lspconfig` opts
+- Language-specific settings belong with the language configuration, not scattered
+
+### Plugin Lazy Loading
+- Use `lazy = true` for plugins that aren't needed at startup
+- Prefer loading via `cmd`, `keys`, `ft`, or `event` triggers
+- Example: `cmd = "ZenMode"` will load the plugin only when the command is run
+
+### Comments and Documentation
+- Add inline comments explaining non-obvious configurations
+- Document WHY you're configuring something, not just WHAT it does
+- Use comment headers to organize related plugin specs in files with multiple plugins
+
+### Testing Changes
+After making configuration changes:
+1. Run `:checkhealth` to verify LSP and tool installations
+2. Run `:Lazy profile` to check for slow startup times
+3. Test that filetypes are detected correctly
+4. Verify autocmds trigger as expected with `:autocmd FileType`
+
 ## LazyVim Integration
 
 This configuration inherits all default plugins, keymaps, options, and autocmds from LazyVim. Key defaults include:
@@ -76,7 +207,10 @@ LSP servers and tools are managed via Mason. The configuration uses:
 - **mason-lspconfig.nvim**: Bridge between Mason and nvim-lspconfig
 - **nvim-lspconfig**: LSP configuration
 
-To add new LSP servers, add them to the `ensure_installed` table in a Mason plugin spec, or configure them in `nvim-lspconfig` opts under `servers`.
+**To add new LSP servers or tools:**
+1. Add them to the `ensure_installed` table in `lua/plugins/mason.lua` (centralized location)
+2. Configure the LSP server in the appropriate language-specific file (e.g., `lua/plugins/bash.lua`) using `nvim-lspconfig` opts with the `servers` table
+3. Do NOT scatter `ensure_installed` lists across multiple plugin files
 
 ## Documentation Guidelines
 

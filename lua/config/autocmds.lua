@@ -16,3 +16,11 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
     end
   end,
 })
+
+-- Auto-enable spell checking for specific file types
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "gitcommit", "markdown", "text", "org" },
+  callback = function()
+    vim.opt_local.spell = true
+  end,
+})
