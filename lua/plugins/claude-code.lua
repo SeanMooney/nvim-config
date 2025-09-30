@@ -16,12 +16,10 @@ return {
       -- Use git project root as working directory
       git_repo_cwd = true,
       auto_start = true, -- Automatically start Claude server when needed
-      -- Diff view customizations
+      -- Diff view customizations (PR #111 updated config options)
       diff_opts = {
-        auto_close_on_accept = true, -- Close diff view after accepting
-        auto_close_on_deny = true, -- Close diff view after rejecting
-        vertical_split = true, -- Use vertical split for diffs
-        open_in_current_tab = true, -- Open diffs in current tab
+        layout = "vertical", -- Use vertical split for diffs
+        open_in_new_tab = true, -- Open diffs in new tab (windows auto-close on accept/deny)
         keep_terminal_focus = false, -- Focus diff view when opened
       },
     },
