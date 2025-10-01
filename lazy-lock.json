@@ -1,6 +1,6 @@
 {
   "claudecode.nvim": { "branch": "main", "commit": "ac2baef386d8078ef2a0aaa98580d25ec178f40a" },
-  "gitsigns.nvim": { "branch": "main", "commit": "0c6826374f47fcbb2b53053986ccc59c115044ff" },
+  "gitsigns.nvim": { "branch": "main", "commit": "472f752943d44d732cece09d442d45681ce38f48" },
   "lazy.nvim": { "branch": "main", "commit": "6c3bda4aca61a13a9c63f1c1d1b16b9d3be90d7a" },
   "mini.nvim": { "branch": "main", "commit": "126ce3328c78399dcff58272f6f540a373b62a75" },
   "nvim-web-devicons": { "branch": "master", "commit": "b8221e42cf7287c4dcde81f232f58d7b947c210d" },
