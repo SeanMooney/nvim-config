@@ -1,4 +1,4 @@
-# 💤 My Neovim Configuration
+ # 💤 My Neovim Configuration
 
 A minimal Neovim setup based on [Kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim) principles, using the [lazy.nvim](https://github.com/folke/lazy.nvim) plugin manager. Optimized for modern development workflows with AI integration and essential utilities.
 
@@ -18,6 +18,11 @@ A minimal Neovim setup based on [Kickstart.nvim](https://github.com/nvim-lua/kic
   - Status and control: `<Space>ai`, `<Space>aR` (restart)
 
 ### Essential Utilities
+- **Telescope** - Powerful fuzzy finder for files, text, help, and more
+  - Fast file navigation with live preview
+  - Project-wide text search (grep)
+  - Search diagnostics, keymaps, help tags, and buffers
+  - Extensible with FZF sorting for performance
 - **Snacks.nvim** - Comprehensive utility collection providing:
   - Dashboard on startup
   - File explorer
@@ -83,6 +88,21 @@ nvim
 - `<Space>aR` - Restart Claude Code
 - `<Space>ai` - Show Claude Code status
 
+**Fuzzy Finder (Telescope):**
+- `<Space>sf` - Search files in project
+- `<Space>sg` - Search by grep (live text search)
+- `<Space>sw` - Search current word under cursor
+- `<Space>sh` - Search help tags
+- `<Space>sk` - Search keymaps
+- `<Space>sd` - Search diagnostics (errors/warnings)
+- `<Space>sr` - Resume last search
+- `<Space>s.` - Search recent files
+- `<Space>s/` - Search in open files
+- `<Space>sn` - Search Neovim config files
+- `<Space>ss` - Search Telescope pickers
+- `<Space><Space>` - Find existing buffers
+- `<Space>/` - Fuzzy search in current buffer
+
 ### Plugin Management
 - `:Lazy` - Open plugin manager UI
 - `:Lazy update` - Update all plugins
@@ -123,14 +143,15 @@ nvim
 
 ### Core Plugins
 
-| Plugin | Purpose |
-|--------|---------|
-| **claudecode.nvim** | AI-powered coding assistant - Claude integration with terminal UI |
-| **snacks.nvim** | Comprehensive utility collection - dashboard, explorer, notifications, terminal, etc. |
+| Plugin | Purpose | When to Use It |
+|--------|---------|----------------|
+| **claudecode.nvim** | AI-powered coding assistant - Claude integration with terminal UI | Ask Claude to write code, explain functionality, or refactor |
+| **snacks.nvim** | Comprehensive utility collection - dashboard, explorer, notifications, terminal, etc. | Browse files (`<Space>e`), view notifications, use integrated terminal |
+| **telescope.nvim** | Fuzzy finder for files, text, help, and more | Quickly find files (`<Space>sf`), search code (`<Space>sg`), navigate buffers (`<Space><Space>`) |
 
 ### Optional Plugins
 
-Additional plugins may be configured in `lua/plugins/telescope.lua` and `lua/plugins/ui.lua` depending on your needs.
+Additional plugins may be configured in `lua/plugins/ui.lua` depending on your needs.
 
 ## Customization
 
