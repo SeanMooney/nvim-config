@@ -3,7 +3,7 @@ return {
     "coder/claudecode.nvim",
     lazy = true, -- Load only when keymaps are used
     dependencies = {
-      "snacks.nvim", -- LazyVim includes this
+      "folke/snacks.nvim", -- LazyVim includes this
     },
     opts = {
       -- Use snacks.nvim for terminal integration
